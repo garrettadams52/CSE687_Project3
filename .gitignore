@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+# .gitignore file content
+.vs/
+*.user
+*.suo
+*.vcxproj.user
+*.vscode/
+*.obj
+*.exe
+*.dll
+*.pdb
