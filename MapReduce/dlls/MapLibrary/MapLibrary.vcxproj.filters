@@ -21,6 +21,9 @@
     <ClInclude Include="WordCountMapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="filewriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

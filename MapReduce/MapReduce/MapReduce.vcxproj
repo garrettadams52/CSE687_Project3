@@ -105,14 +105,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\garrettadams\source\Repos\CSE687_Project1\MapReduce\shared\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"C:\Repo\CSE687_Project3\MapReduce\shared\include"</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)dlls\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Users\garrettadams\source\Repos\CSE687_Project1\MapReduce\x64\Debug\ReduceLibrary.lib;C:\Users\garrettadams\source\Repos\CSE687_Project1\MapReduce\x64\Debug\MapLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>"C:\Repo\CSE687_Project3\MapReduce\x64\Debug\ReduceLibrary.lib";"C:\Repo\CSE687_Project3\MapReduce\x64\Debug\MapLibrary.lib";%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

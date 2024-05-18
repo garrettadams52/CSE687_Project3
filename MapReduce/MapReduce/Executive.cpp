@@ -4,18 +4,18 @@
 #include <Windows.h>
 
 Executive::Executive(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
-    const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize)
-    : fileManagement(inputDir, tempDir, outputDir),  
+    const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize, int numReducers)
+    : fileManagement(inputDir, tempDir, outputDir),
     hMapDll(nullptr), hReduceDll(nullptr),
-    mapInstance(nullptr), reduceInstance(nullptr),
     bufferSize(bufSize),
-    workflow(inputDir, tempDir, outputDir, nullptr, nullptr) {  // Temporarily initialize with nullptr
+    numReducers(numReducers),
+    workflow(inputDir, tempDir, outputDir, std::vector<IMap*>(), nullptr) {  // Temporarily initialize with an empty vector
 
     loadMapDll(mapDllPath);
     loadReduceDll(reduceDllPath);
 
-    if (mapInstance && reduceInstance) {
-        workflow = Workflow(inputDir, tempDir, outputDir, mapInstance, reduceInstance);
+    if (!mapInstances.empty() && reduceInstance) {
+        workflow = Workflow(inputDir, tempDir, outputDir, mapInstances, reduceInstance);
     }
     else {
         std::cerr << "Failed to load map or reduce DLLs correctly.\n";
@@ -23,8 +23,7 @@ Executive::Executive(const std::string& inputDir, const std::string& tempDir, co
 }
 
 void Executive::run() {
-    
-    if (mapInstance && reduceInstance) {
+    if (!mapInstances.empty() && reduceInstance) {
         workflow.run();
     }
     else {
@@ -34,8 +33,10 @@ void Executive::run() {
 }
 
 Executive::~Executive() {
-    if (mapInstance) {
+    for (auto mapInstance : mapInstances) {
         delete mapInstance;
+    }
+    if (hMapDll) {
         FreeLibrary(hMapDll);
     }
     if (reduceInstance) {
@@ -43,7 +44,6 @@ Executive::~Executive() {
         FreeLibrary(hReduceDll);
     }
 }
-
 
 void Executive::markSuccess() {
     std::string successFilePath = fileManagement.getOutputDirectory() + "/SUCCESS";
@@ -69,7 +69,17 @@ void Executive::loadMapDll(const std::string& path) {
         std::cerr << "Failed to find CreateMapInstance function" << std::endl;
         return;
     }
-    mapInstance = createMap(fileManagement, bufferSize);
+
+    // Create multiple instances of the map function
+    for (int i = 0; i < numReducers; ++i) {
+        IMap* mapInstance = createMap(&fileManagement, bufferSize, numReducers);
+        if (mapInstance) {
+            mapInstances.push_back(mapInstance);
+        }
+        else {
+            std::cerr << "Failed to create map instance" << std::endl;
+        }
+    }
 }
 
 void Executive::loadReduceDll(const std::string& path) {
@@ -83,6 +93,5 @@ void Executive::loadReduceDll(const std::string& path) {
         std::cerr << "Failed to find CreateReduceInstance function" << std::endl;
         return;
     }
-    reduceInstance = createReduce(fileManagement);
+    reduceInstance = createReduce(&fileManagement);
 }
-
