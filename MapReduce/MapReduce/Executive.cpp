@@ -70,6 +70,7 @@ void Executive::loadMapDll(const std::string& path) {
         return;
     }
 
+
     // Create multiple instances of the map function
     for (int i = 0; i < numReducers; ++i) {
         IMap* mapInstance = createMap(&fileManagement, bufferSize, numReducers);

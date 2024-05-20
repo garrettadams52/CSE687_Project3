@@ -23,6 +23,8 @@ WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize
         fs::create_directories(tempDirectory);
     }
 
+   
+
     for (int i = 0; i < numReducers; ++i) {
         std::string fullPath = tempDirectory + "\\temp_output_" + std::to_string(i) + ".txt";
         outputFiles.push_back(new FileWriter(fullPath)); // Use FileWriter to manage file stream

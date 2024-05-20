@@ -29,6 +29,8 @@ void Workflow::run() {
     for (const auto& file : files) {
         auto lines = fileManagement.readFile(file);
         for (const auto& line : lines) {
+            // Log which mapper is used
+            std::cout << "Using mapper instance " << fileIndex % mapperCount << " for line: " << line << std::endl;
             mapInstances[fileIndex % mapperCount]->MapFunction(file, line);
             fileIndex++;
         }
