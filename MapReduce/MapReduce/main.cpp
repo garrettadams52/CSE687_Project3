@@ -1,3 +1,4 @@
+#include "Controller.h"
 #include "Executive.h"
 #include <iostream>
 #include <string>
@@ -12,7 +13,8 @@ int main() {
     std::string inputDirectory, tempDirectory, outputDirectory;
     std::string mapDllPath, reduceDllPath;
     int bufferSize = 1000;    // Buffer size for the mapper
-    int numReducers = 4;      // Number of reducer instances, adjust as needed
+    int numReducers = 3;      // Number of reducer instances, adjust as needed
+    int numMappers = numReducers + 1; // Number of mappers is one more than reducers
 
     // Prompt the user for input paths and read them from standard input
     std::cout << "Enter the input file path, temporary directory, output directory, Map DLL path, and Reduce DLL path all separated by spaces:\n";
@@ -35,6 +37,9 @@ int main() {
         return 1;   // Exit if any of the paths are invalid
     }
 
+    // Run the mapper processes using Controller
+    Controller::runMappers(numMappers, inputDirectory, tempDirectory, mapDllPath);
+
     // Create an instance of the Executive class with the provided paths and parameters
     Executive exec(inputDirectory, tempDirectory, outputDirectory, mapDllPath, reduceDllPath, bufferSize, numReducers);
 
@@ -46,8 +51,6 @@ int main() {
         std::cerr << "An error occurred: " << e.what() << std::endl;
         return 1;   // Exit if an exception is thrown
     }
-
-    
 
     return 0;   // Exit successfully
 }

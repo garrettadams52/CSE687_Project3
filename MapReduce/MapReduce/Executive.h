@@ -2,19 +2,20 @@
 #define EXECUTIVE_H
 
 #include "Workflow.h"
+#include "FileManagement.h"
 #include <string>
 #include <vector>
-#include "Windows.h"
+#include <windows.h>
 
-typedef IMap* (*CREATEMAPFUNC)(FileManagement*, int, int);
-typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement*);
+typedef IMap* (*CREATEMAPFUNC)(IFileManagement*, size_t, int);
+typedef IReduce* (*CREATEREDUCEFUNC)(IFileManagement*);
 
 class Executive {
-    Workflow workflow;
+    Workflow* workflow;
     FileManagement fileManagement;
-    HMODULE hMapDll;
+    std::vector<HMODULE> hMapDlls;
     HMODULE hReduceDll;
-    std::vector<IMap*> mapInstances; // Vector to store multiple mapper instances
+    std::vector<IMap*> mapInstances;
     IReduce* reduceInstance;
     int bufferSize;
     int numReducers;
@@ -26,7 +27,7 @@ public:
     void run();
     void markSuccess();
 private:
-    void loadMapDll(const std::string& path);
+    void loadMapDlls(const std::string& path);
     void loadReduceDll(const std::string& path);
 };
 

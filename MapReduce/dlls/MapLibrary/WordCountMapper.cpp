@@ -7,7 +7,7 @@
 
 namespace fs = std::filesystem;
 
-// Constructor: Initializes the mapper with a file manager, buffer size, and number of reducers.
+// Constructor: Initializes the mapper with file manager, buffer size, and number of reducers
 WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers)
     : fileManager(fileManager), bufferSize(bufferSize), numReducers(numReducers) {
     if (!fileManager) {
@@ -23,28 +23,26 @@ WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize
         fs::create_directories(tempDirectory);
     }
 
-   
-
+    // Open output files for each reducer
     for (int i = 0; i < numReducers; ++i) {
         std::string fullPath = tempDirectory + "\\temp_output_" + std::to_string(i) + ".txt";
-        outputFiles.push_back(new FileWriter(fullPath)); // Use FileWriter to manage file stream
+        outputFiles.push_back(new FileWriter(fullPath));
     }
 }
 
-// Destructor: Flushes the buffer and closes all output files.
+// Destructor: Flushes the buffer and closes all output files
 WordCountMapper::~WordCountMapper() {
     flushBuffer();
-    for (auto& file : outputFiles) {
-        delete file; // Ensure proper cleanup of file writers
+    for (auto fileWriter : outputFiles) {
+        delete fileWriter;
     }
 }
 
-// Map function: Processes the content of the input file.
+// Map function: Processes the content of the input file
 void WordCountMapper::map(const std::string& fileName, const std::string& content) {
     std::istringstream stream(content);
     std::string word;
     while (stream >> word) {
-        // Remove non-alphabetical characters and convert to lowercase.
         word.erase(std::remove_if(word.begin(), word.end(),
             [](unsigned char c) { return !std::isalpha(c); }), word.end());
         std::transform(word.begin(), word.end(), word.begin(), ::tolower);
@@ -54,31 +52,30 @@ void WordCountMapper::map(const std::string& fileName, const std::string& conten
     }
 }
 
-// Export function: Adds word to buffer and flushes buffer if it exceeds the size.
+// Exports the word to the appropriate output file based on partition
 void WordCountMapper::exportToFile(const std::string& word) {
-    int partition = partitionFunction(word); // Determine the partition for the word.
-    buffer.push_back({ partition, "(" + word + ", 1)" }); // Add word with partition info to buffer.
+    int partition = partitionFunction(word);
+    buffer.emplace_back(partition, "(" + word + ", 1)");
     if (buffer.size() >= bufferSize) {
-        flushBuffer(); // Flush buffer if it exceeds the buffer size.
+        flushBuffer();
     }
 }
 
-// Partition function: Determines the partition for a given key using a hash function.
-int WordCountMapper::partitionFunction(const std::string& key) {
-    std::hash<std::string> hashFn;
-    return hashFn(key) % numReducers; // Use hash function to assign partition based on key.
-}
-
-// Flush function: Writes buffered entries to the appropriate output files.
+// Flushes the buffer to the output files
 void WordCountMapper::flushBuffer() {
     for (const auto& entry : buffer) {
-        int partition = entry.first; // Get partition info from buffer entry.
-        outputFiles[partition]->write(entry.second); // Write entry to the corresponding output file.
+        outputFiles[entry.first]->write(entry.second);
     }
-    buffer.clear(); // Clear buffer after flushing.
+    buffer.clear();
 }
 
-// Factory function: Creates an instance of the WordCountMapper with the given parameters.
+// Partition function: Determines the partition for a given key
+int WordCountMapper::partitionFunction(const std::string& key) {
+    std::hash<std::string> hashFunction;
+    return hashFunction(key) % numReducers;
+}
+
+// Factory function: Creates an instance of the WordCountMapper
 extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers) {
-    return new WordCountMapper(fileManager, bufferSize, numReducers); // Return a new instance of WordCountMapper.
+    return new WordCountMapper(fileManager, bufferSize, numReducers);
 }

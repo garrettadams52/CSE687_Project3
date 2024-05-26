@@ -11,13 +11,16 @@ class Workflow {
     std::string inputDirectory;
     std::string tempDirectory;
     std::string outputDirectory;
-    std::vector<IMap*> mapInstances; // Vector to store multiple mapper instances
+    std::vector<IMap*> mapInstances;
     IReduce* reduceInstance;
     FileManagement fileManagement;
 
 public:
-    Workflow(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir, const std::vector<IMap*>& mappers, IReduce* reduce);
-    void run();
+    Workflow(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
+        const std::vector<IMap*>& mapInstances, IReduce* reduceInstance);
+    void runMap(int index);
+    void sortAndAggregate();
+    void runReduce();
 };
 
-#endif // WORKFLOW_H
+#endif
