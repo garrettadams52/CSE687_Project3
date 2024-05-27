@@ -1,56 +1,107 @@
 #include "Controller.h"
 #include "Executive.h"
+#include "FileManagement.h"
+#include "IMap.h"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <filesystem>
-#include <Windows.h>
+#include <windows.h>
 
 namespace fs = std::filesystem;
 
-int main() {
+void runMapper(int argc, char* argv[]) {
+    if (argc < 6) {
+        std::cerr << "Usage: MapReduce.exe mapper <mapper_id> <input_directory> <temp_directory> <map_dll_path>" << std::endl;
+        return;
+    }
+
+    int mapperId = std::stoi(argv[2]);
+    std::string inputDirectory = argv[3];
+    std::string tempDirectory = argv[4];
+    std::string mapDllPath = argv[5];
+
+    HMODULE hMapDll = LoadLibraryA(mapDllPath.c_str());
+    if (!hMapDll) {
+        std::cerr << "Failed to load Map DLL: " << mapDllPath << std::endl;
+        return;
+    }
+
+    typedef IMap* (*CREATEMAPFUNC)(IFileManagement*, size_t, int);
+    CREATEMAPFUNC createMap = (CREATEMAPFUNC)GetProcAddress(hMapDll, "CreateMapInstance");
+    if (!createMap) {
+        std::cerr << "Failed to find CreateMapInstance function in DLL: " << mapDllPath << std::endl;
+        FreeLibrary(hMapDll);
+        return;
+    }
+
+    FileManagement fileManagement(inputDirectory, tempDirectory, tempDirectory);
+    IMap* mapInstance = createMap(&fileManagement, 1000, 3);
+    if (!mapInstance) {
+        std::cerr << "Failed to create map instance" << std::endl;
+        FreeLibrary(hMapDll);
+        return;
+    }
+
+    for (const auto& file : fileManagement.getAllFiles()) {
+        auto lines = fileManagement.readFile(file);
+        for (const auto& line : lines) {
+            mapInstance->MapFunction(file, line);
+        }
+    }
+
+    delete mapInstance;
+    FreeLibrary(hMapDll);
+    std::cout << "Mapper process completed" << std::endl;
+}
+
+void runController() {
     std::string inputLine;
     std::string inputDirectory, tempDirectory, outputDirectory;
     std::string mapDllPath, reduceDllPath;
-    int bufferSize = 1000;    // Buffer size for the mapper
-    int numReducers = 3;      // Number of reducer instances, adjust as needed
-    int numMappers = numReducers + 1; // Number of mappers is one more than reducers
+    int bufferSize = 1000;
+    int numReducers = 3;
+    int numMappers = numReducers + 1;
 
-    // Prompt the user for input paths and read them from standard input
-    std::cout << "Enter the input file path, temporary directory, output directory, Map DLL path, and Reduce DLL path all separated by spaces:\n";
-    std::cout << "Example: C:\\Path\\To\\InputFiles C:\\Path\\To\\Temp C:\\Path\\To\\Output C:\\Path\\To\\Map.dll C:\\Path\\To\\Reduce.dll\n";
-    std::getline(std::cin, inputLine);
+    while (true) {
+        std::cout << "Enter the input file path, temporary directory, output directory, Map DLL path, and Reduce DLL path all separated by spaces:\n";
+        std::cout << "Example: C:\\Path\\To\\InputFiles C:\\Path\\To\\Temp C:\\Path\\To\\Output C:\\Path\\To\\Map.dll C:\\Path\\To\\Reduce.dll\n";
+        std::getline(std::cin, inputLine);
 
-    // Parse the input line into individual path variables
-    std::istringstream iss(inputLine);
-    if (!(iss >> inputDirectory >> tempDirectory >> outputDirectory >> mapDllPath >> reduceDllPath)) {
-        std::cerr << "Error: You must enter exactly five paths separated by spaces." << std::endl;
-        return 1;   // Exit if the input is not correctly formatted
+        std::istringstream iss(inputLine);
+        if (!(iss >> inputDirectory >> tempDirectory >> outputDirectory >> mapDllPath >> reduceDllPath)) {
+            std::cerr << "Error: You must enter exactly five paths separated by spaces." << std::endl;
+            continue;
+        }
+
+        if (!fs::exists(inputDirectory) || !fs::is_directory(inputDirectory) ||
+            !fs::exists(tempDirectory) || !fs::is_directory(tempDirectory) ||
+            !fs::exists(outputDirectory) || !fs::is_directory(outputDirectory) ||
+            !fs::exists(mapDllPath) || !fs::exists(reduceDllPath)) {
+            std::cerr << "Error: One or more specified paths do not exist or are not accessible." << std::endl;
+            continue;
+        }
+
+        break;
     }
 
-    // Check if the specified directories and files exist and are accessible
-    if (!fs::exists(inputDirectory) || !fs::is_directory(inputDirectory) ||
-        !fs::exists(tempDirectory) || !fs::is_directory(tempDirectory) ||
-        !fs::exists(outputDirectory) || !fs::is_directory(outputDirectory) ||
-        !fs::exists(mapDllPath) || !fs::exists(reduceDllPath)) {
-        std::cerr << "Error: One or more specified paths do not exist or are not accessible." << std::endl;
-        return 1;   // Exit if any of the paths are invalid
-    }
+    Controller controller;
+    controller.runMappers(numMappers, inputDirectory, tempDirectory, mapDllPath);
 
-    // Run the mapper processes using Controller
-    Controller::runMappers(numMappers, inputDirectory, tempDirectory, mapDllPath);
-
-    // Create an instance of the Executive class with the provided paths and parameters
     Executive exec(inputDirectory, tempDirectory, outputDirectory, mapDllPath, reduceDllPath, bufferSize, numReducers);
 
-    // Run the MapReduce process and handle any exceptions that may occur
-    try {
-        exec.run();
+    
+
+    std::cout << "MapReduce job completed. Check the output directory for results." << std::endl;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc > 1 && std::string(argv[1]) == "mapper") {
+        runMapper(argc, argv);
     }
-    catch (const std::exception& e) {
-        std::cerr << "An error occurred: " << e.what() << std::endl;
-        return 1;   // Exit if an exception is thrown
+    else {
+        runController();
     }
 
-    return 0;   // Exit successfully
+    return 0;
 }

@@ -7,7 +7,6 @@
 
 namespace fs = std::filesystem;
 
-// Constructor: Initializes the mapper with file manager, buffer size, and number of reducers
 WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers)
     : fileManager(fileManager), bufferSize(bufferSize), numReducers(numReducers) {
     if (!fileManager) {
@@ -23,22 +22,28 @@ WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize
         fs::create_directories(tempDirectory);
     }
 
-    // Open output files for each reducer
     for (int i = 0; i < numReducers; ++i) {
         std::string fullPath = tempDirectory + "\\temp_output_" + std::to_string(i) + ".txt";
-        outputFiles.push_back(new FileWriter(fullPath));
+        std::ofstream* outputFile = new std::ofstream(fullPath, std::ios::app);
+        if (!outputFile->is_open()) {
+            throw std::runtime_error("Failed to open output file at: " + fullPath);
+        }
+        outputFiles.push_back(outputFile);
+        std::cout << "Opened file: " << fullPath << std::endl; // Log file opening
     }
 }
 
-// Destructor: Flushes the buffer and closes all output files
 WordCountMapper::~WordCountMapper() {
     flushBuffer();
-    for (auto fileWriter : outputFiles) {
-        delete fileWriter;
+    for (auto file : outputFiles) {
+        if (file->is_open()) {
+            file->close();
+        }
+        delete file;
     }
+    std::cout << "Closed all output files" << std::endl; // Log file closure
 }
 
-// Map function: Processes the content of the input file
 void WordCountMapper::map(const std::string& fileName, const std::string& content) {
     std::istringstream stream(content);
     std::string word;
@@ -50,32 +55,33 @@ void WordCountMapper::map(const std::string& fileName, const std::string& conten
             exportToFile(word);
         }
     }
+    std::cout << "Processed file: " << fileName << std::endl; // Log file processing
 }
 
-// Exports the word to the appropriate output file based on partition
 void WordCountMapper::exportToFile(const std::string& word) {
     int partition = partitionFunction(word);
     buffer.emplace_back(partition, "(" + word + ", 1)");
     if (buffer.size() >= bufferSize) {
         flushBuffer();
     }
+    std::cout << "Exported word: " << word << " to partition: " << partition << std::endl; // Log word export
 }
 
-// Flushes the buffer to the output files
 void WordCountMapper::flushBuffer() {
     for (const auto& entry : buffer) {
-        outputFiles[entry.first]->write(entry.second);
+        *outputFiles[entry.first] << entry.second << std::endl;
     }
     buffer.clear();
+    std::cout << "Flushed buffer" << std::endl; // Log buffer flush
 }
 
-// Partition function: Determines the partition for a given key
 int WordCountMapper::partitionFunction(const std::string& key) {
     std::hash<std::string> hashFunction;
-    return hashFunction(key) % numReducers;
+    int partition = hashFunction(key) % numReducers;
+    std::cout << "Partitioned key: " << key << " to partition: " << partition << std::endl; // Log partition function
+    return partition;
 }
 
-// Factory function: Creates an instance of the WordCountMapper
 extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers) {
     return new WordCountMapper(fileManager, bufferSize, numReducers);
 }

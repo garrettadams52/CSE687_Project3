@@ -5,8 +5,8 @@
 
 class Controller {
 public:
-    static void runMapperProcess(const std::string& exePath, const std::string& args);
-    static void runMappers(int numMappers, const std::string& inputDir, const std::string& tempDir, const std::string& mapDllPath);
+    void runMapperProcess(const std::string& exePath, const std::string& args);
+    void runMappers(int numMappers, const std::string& inputDir, const std::string& tempDir, const std::string& mapDllPath);
 };
 
 #endif // CONTROLLER_H
