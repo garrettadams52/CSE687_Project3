@@ -5,7 +5,6 @@
 #include "IMap.h"
 #include <vector>
 #include <string>
-#include <utility>
 #include <fstream>
 
 #ifdef MAPLIBRARY_EXPORTS
@@ -16,25 +15,25 @@
 
 class MAPLIBRARY_API WordCountMapper : public IMap {
     IFileManagement* fileManager;
-    std::vector<std::ofstream*> outputFiles;
+    std::vector<std::ofstream*> outputFiles; // Use raw pointers to ofstream
     std::vector<std::pair<int, std::string>> buffer;
     size_t bufferSize;
     int numReducers;
 
 public:
-    WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers);
+    WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers, int mapperID);
     virtual ~WordCountMapper();
 
     void map(const std::string& fileName, const std::string& content);
     virtual void MapFunction(const std::string& filename, const std::string& content) override {
         map(filename, content);
     }
-
     void exportToFile(const std::string& word);
     void flushBuffer();
     int partitionFunction(const std::string& key);
 };
 
-extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers);
+// Factory function to create an instance of WordCountMapper
+extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers, int mapperID);
 
 #endif // WORD_COUNT_MAPPER_H

@@ -60,7 +60,7 @@ void runController() {
     std::string inputDirectory, tempDirectory, outputDirectory;
     std::string mapDllPath, reduceDllPath;
     int bufferSize = 1000;
-    int numReducers = 3;
+    int numReducers = 2;
     int numMappers = numReducers + 1;
 
     while (true) {
