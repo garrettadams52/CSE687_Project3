@@ -1,20 +1,21 @@
 #ifndef SORT_H
 #define SORT_H
 
-#include <string>
+#include "FileManagement.h"
 #include <vector>
 #include <map>
-#include "FileManagement.h"
-
+#include <string>
 
 class Sort {
+    FileManagement* fileManager;
+    int numReducers;
+
 public:
-    explicit Sort(FileManagement* fileManager);
+    Sort(FileManagement* fileManager, int numReducers); // Ensure constructor matches
     void sortAndAggregate();
 
 private:
-    FileManagement* fileManager;
     std::map<std::string, std::vector<int>> aggregateData(const std::vector<std::pair<std::string, int>>& data);
 };
 
-#endif 
+#endif // SORT_H

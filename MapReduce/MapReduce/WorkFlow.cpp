@@ -1,38 +1,32 @@
 #include "Workflow.h"
 #include <iostream>
-#include "Sort.h"
-#include "FileManagement.h"
-#include "IMap.h"
-#include "IReduce.h"
-
-Workflow::Workflow(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir, IMap* map, IReduce* reduce)
-    : inputDirectory(inputDir), tempDirectory(tempDir), outputDirectory(outputDir), mapInstance(map), reduceInstance(reduce), fileManagement(inputDir, tempDir, outputDir) {}
+#include <sstream>
+#include <algorithm>
 
 
-void Workflow::run() {
 
-    std::vector<std::string> filesToClear = { "temp_output.txt", "final_output.txt", "sorted_aggregated_output.txt" };
-    fileManagement.clearFiles(tempDirectory, filesToClear);
+// Merged Constructor
+Workflow::Workflow(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
+    const std::vector<IMap*>& mapInstances, IReduce* reduceInstance)
+    : inputDirectory(inputDir), tempDirectory(tempDir), outputDirectory(outputDir),
+    mapInstances(mapInstances), reduceInstance(reduceInstance), fileManagement(inputDir, tempDir, outputDir) {}
 
-    std::string nonFile1 = "whatever.txt";
-    std::string nonFile2 = "whatever.txt";
-
-    Sort sorter(&fileManagement);  
-
-    auto files = fileManagement.getAllFiles();
-    if (files.empty()) {
-        std::cerr << "No files found in the input directory: " << inputDirectory << std::endl;
-        return;
+// Function to run map instances
+void Workflow::runMap(int index) {
+    // Merged logic to ensure each mapper processes its files
+    std::string fileName = inputDirectory + "\\temp_output_" + std::to_string(index); // Adjust this as needed
+    std::vector<std::string> lines = fileManagement.readFile(fileName);
+    for (const auto& line : lines) {
+        mapInstances[index]->MapFunction(fileName, line);
     }
+}
 
-    for (const auto& file : files) {
-        auto lines = fileManagement.readFile(file);
-        for (const auto& line : lines) {
-            mapInstance->MapFunction(file, line);  
-        }
-    }
+   
 
-    sorter.sortAndAggregate();  
+void Workflow::sortAndAggregate() {
+    // Implement sorting and aggregation logic
+}
 
-    reduceInstance->ReduceFunction();  
+void Workflow::runReduce() {
+    // Implement reduce execution logic
 }
