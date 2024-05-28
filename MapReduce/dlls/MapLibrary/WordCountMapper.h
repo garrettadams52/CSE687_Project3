@@ -19,8 +19,10 @@ class MAPLIBRARY_API WordCountMapper : public IMap {
     std::vector<std::pair<int, std::string>> buffer;
     size_t bufferSize;
     int numReducers;
+    int mapperID;
 
 public:
+    // Merged Constructor
     WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers, int mapperID);
     virtual ~WordCountMapper();
 
@@ -33,7 +35,7 @@ public:
     int partitionFunction(const std::string& key);
 };
 
-// Factory function to create an instance of WordCountMapper
+// Factory function with merged logic
 extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers, int mapperID);
 
 #endif // WORD_COUNT_MAPPER_H

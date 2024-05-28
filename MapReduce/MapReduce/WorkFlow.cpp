@@ -3,25 +3,30 @@
 #include <sstream>
 #include <algorithm>
 
+
+
+// Merged Constructor
 Workflow::Workflow(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
     const std::vector<IMap*>& mapInstances, IReduce* reduceInstance)
     : inputDirectory(inputDir), tempDirectory(tempDir), outputDirectory(outputDir),
     mapInstances(mapInstances), reduceInstance(reduceInstance), fileManagement(inputDir, tempDir, outputDir) {}
 
+// Function to run map instances
 void Workflow::runMap(int index) {
-    // Implement your map execution logic here.
-    // This is just an example.
-    std::string fileName = inputDirectory + "\\temp_output_"; // Adjust this as needed
+    // Merged logic to ensure each mapper processes its files
+    std::string fileName = inputDirectory + "\\temp_output_" + std::to_string(index); // Adjust this as needed
     std::vector<std::string> lines = fileManagement.readFile(fileName);
     for (const auto& line : lines) {
         mapInstances[index]->MapFunction(fileName, line);
     }
 }
 
+   
+
 void Workflow::sortAndAggregate() {
-    // Implement your sorting and aggregation logic here.
+    // Implement sorting and aggregation logic
 }
 
 void Workflow::runReduce() {
-    // Implement your reduce execution logic here.
+    // Implement reduce execution logic
 }

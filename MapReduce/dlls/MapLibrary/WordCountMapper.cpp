@@ -7,6 +7,7 @@
 
 namespace fs = std::filesystem;
 
+// Merged Constructor
 WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize, int numReducers, int mapperID)
     : fileManager(fileManager), bufferSize(bufferSize), numReducers(numReducers) {
     if (!fileManager) {
@@ -24,7 +25,7 @@ WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize
 
     // Open output files for each reducer with unique file names including mapperID
     for (int i = 0; i < numReducers; ++i) {
-        std::string fullPath = tempDirectory + "\\mapper_output_" + std::to_string(mapperID) + "_" + std::to_string(i) + ".txt";
+        std::string fullPath = tempDirectory + "\\m" + std::to_string(mapperID) + std::to_string(i) + ".txt";
         std::ofstream* outFile = new std::ofstream(fullPath);
         if (!outFile->is_open()) {
             delete outFile;
@@ -77,6 +78,7 @@ int WordCountMapper::partitionFunction(const std::string& key) {
     return hashFunction(key) % numReducers;
 }
 
+// Factory function with merged logic
 extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, int numReducers, int mapperID) {
     return new WordCountMapper(fileManager, bufferSize, numReducers, mapperID);
 }

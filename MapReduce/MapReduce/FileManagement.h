@@ -19,6 +19,7 @@ public:
     virtual void createEmptyFile(const std::string& filePath) override;
     virtual std::string getTempDirectory() const override;
     virtual std::string getOutputDirectory() const override;
+    virtual void setInputDirectory(std::string inputDirectory) override;
 
 private:
     std::string inputDirectory;

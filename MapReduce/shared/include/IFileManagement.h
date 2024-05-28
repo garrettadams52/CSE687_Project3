@@ -13,9 +13,11 @@ public:
     virtual void clearFiles(const std::string& dirPath, const std::vector<std::string>& fileNames) = 0;
     virtual void writeFile(const std::string& filePath, const std::string& content, bool append = true) = 0;
     virtual void createEmptyFile(const std::string& filePath) = 0;
+    
 
     virtual std::string getTempDirectory() const = 0;
     virtual std::string getOutputDirectory() const = 0;
+    virtual void setInputDirectory(std::string inputDirectory) = 0;
 };
 
 #endif // IFILEMANAGEMENT_H
