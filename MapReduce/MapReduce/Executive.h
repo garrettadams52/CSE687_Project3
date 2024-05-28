@@ -5,8 +5,8 @@
 #include <string>
 #include "Windows.h"
 
-typedef IMap* (*CREATEMAPFUNC)(FileManagement&, int);
-typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement&);
+typedef IMap* (*CREATEMAPFUNC)(FileManagement&, int, std::string&);
+typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement&, std::string&, std::string&);
 
 class Executive {
     Workflow workflow;

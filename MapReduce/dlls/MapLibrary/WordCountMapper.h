@@ -18,9 +18,10 @@ class MAPLIBRARY_API WordCountMapper : public IMap {
     std::ofstream outputFile;
     std::vector<std::string> buffer;
     size_t bufferSize;
+    std::string fileName;
 
 public:
-    WordCountMapper(IFileManagement* fileManager, size_t bufferSize);
+    WordCountMapper(IFileManagement* fileManager, size_t bufferSize, const std::string& fileName);
     virtual ~WordCountMapper();
 
     void map(const std::string& fileName, const std::string& content); 
@@ -31,7 +32,7 @@ public:
     void flushBuffer();
 };
 
-extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize);
+extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, const std::string& fileName);
 
 
 #endif // WORD_COUNT_MAPPER_H

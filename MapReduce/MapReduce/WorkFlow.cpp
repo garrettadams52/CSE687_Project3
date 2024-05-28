@@ -14,6 +14,9 @@ void Workflow::run() {
     std::vector<std::string> filesToClear = { "temp_output.txt", "final_output.txt", "sorted_aggregated_output.txt" };
     fileManagement.clearFiles(tempDirectory, filesToClear);
 
+    std::string nonFile1 = "whatever.txt";
+    std::string nonFile2 = "whatever.txt";
+
     Sort sorter(&fileManagement);  
 
     auto files = fileManagement.getAllFiles();

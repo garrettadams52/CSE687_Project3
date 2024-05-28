@@ -7,8 +7,8 @@
 
 namespace fs = std::filesystem;
 
-WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize)
-    : fileManager(fileManager), bufferSize(bufferSize) {
+WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize, const std::string& fileName)
+    : fileManager(fileManager), bufferSize(bufferSize), fileName(fileName) {
     if (!fileManager) {
         throw std::invalid_argument("fileManager pointer cannot be null.");
     }
@@ -64,8 +64,8 @@ void WordCountMapper::flushBuffer() {
 }
 
 
-extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize) {
-    return new WordCountMapper(fileManager, bufferSize);
+extern "C" MAPLIBRARY_API IMap * CreateMapInstance(IFileManagement * fileManager, size_t bufferSize, const std::string& fileName) {
+    return new WordCountMapper(fileManager, bufferSize, fileName);
 }
 
 

@@ -69,7 +69,11 @@ void Executive::loadMapDll(const std::string& path) {
         std::cerr << "Failed to find CreateMapInstance function" << std::endl;
         return;
     }
-    mapInstance = createMap(fileManagement, bufferSize);
+
+    std::string dummyFile = "dummy_text.txt";
+
+    mapInstance = createMap(fileManagement, bufferSize, dummyFile);
+
 }
 
 void Executive::loadReduceDll(const std::string& path) {
@@ -83,6 +87,9 @@ void Executive::loadReduceDll(const std::string& path) {
         std::cerr << "Failed to find CreateReduceInstance function" << std::endl;
         return;
     }
-    reduceInstance = createReduce(fileManagement);
+    std::string outFile = "final_output.txt";
+    std::string inFile = "dummy_text.txt";
+    reduceInstance = createReduce(fileManagement, inFile, outFile);
+
 }
 
