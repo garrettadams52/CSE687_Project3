@@ -17,7 +17,7 @@ void Workflow::run() {
     std::string nonFile1 = "whatever.txt";
     std::string nonFile2 = "whatever.txt";
 
-    Sort sorter(&fileManagement);  
+    Sort sorter(&fileManagement, nonFile1, nonFile2);  
 
     auto files = fileManagement.getAllFiles();
     if (files.empty()) {

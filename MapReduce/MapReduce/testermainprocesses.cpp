@@ -3,6 +3,8 @@
 #include <sstream>
 #include <fstream>
 #include <filesystem>
+#include <stdio.h>
+#include <stdlib.h>
 #include <Windows.h>
 #include "Executive.h"
 #include "C:\Users\mark\source\repos\CIS687_Project3\CSE687_Project3\MapReduce\shared\include\IMap.h"

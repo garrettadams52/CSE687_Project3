@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reducer2", "Reducer2\Reducer2.vcxproj", "{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Debug|x64.ActiveCfg = Debug|x64
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Debug|x64.Build.0 = Debug|x64
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Debug|x86.ActiveCfg = Debug|Win32
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Debug|x86.Build.0 = Debug|Win32
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Release|x64.ActiveCfg = Release|x64
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Release|x64.Build.0 = Release|x64
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Release|x86.ActiveCfg = Release|Win32
+		{1B16DAAE-59CD-49B9-AFAB-5DF661FFB39A}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0F70A21-221E-4AA3-840B-C8E7539D8257}
+	EndGlobalSection
+EndGlobal
