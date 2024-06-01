@@ -3,9 +3,9 @@
 
 #include "Workflow.h"
 #include <string>
-#include "Windows.h"
+#include <Windows.h>
 
-typedef IMap* (*CREATEMAPFUNC)(FileManagement&, int);
+typedef IMap* (*CREATEMAPFUNC)(FileManagement&, size_t, int, int);
 typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement&);
 
 class Executive {
@@ -15,14 +15,16 @@ class Executive {
     HMODULE hReduceDll;
     IMap* mapInstance;
     IReduce* reduceInstance;
-    int bufferSize;  
+    int bufferSize;
+    int numReducers;
 
 public:
     Executive(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
-        const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize);
+        const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize, int reducers);
     ~Executive();
-    void run();
+    void run(const std::string& mode, int mapperIndex = -1);
     void markSuccess();
+
 private:
     void loadMapDll(const std::string& path);
     void loadReduceDll(const std::string& path);

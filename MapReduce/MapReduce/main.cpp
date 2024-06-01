@@ -7,12 +7,23 @@
 
 namespace fs = std::filesystem;
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc > 1 && std::string(argv[1]) == "mapper") {
+        int mapperIndex = std::stoi(argv[2]);
+        std::string mapDllPath = argv[3];
+        std::string inputDirectory = argv[4];
+        int numReducers = std::stoi(argv[5]);
+
+        Executive exec(inputDirectory, "", "", mapDllPath, "", 1000, numReducers);
+        exec.run("mapper", mapperIndex);
+        return 0;
+    }
+
     std::string inputLine;
     std::string inputDirectory, tempDirectory, outputDirectory;
     std::string mapDllPath, reduceDllPath;
-    int bufferSize = 1000;  
-
+    int bufferSize = 1000;
+    int numReducers = 2;
 
     std::cout << "Enter the input file path, temporary directory, output directory, Map DLL path, and Reduce DLL path all separated by spaces:\n";
     std::cout << "Example: C:\\Path\\To\\InputFiles C:\\Path\\To\\Temp C:\\Path\\To\\Output C:\\Path\\To\\Map.dll C:\\Path\\To\\Reduce.dll\n";
@@ -30,10 +41,9 @@ int main() {
         return 1;
     }
 
-    Executive exec(inputDirectory, tempDirectory, outputDirectory, mapDllPath, reduceDllPath, bufferSize);
+    Executive exec(inputDirectory, tempDirectory, outputDirectory, mapDllPath, reduceDllPath, bufferSize, numReducers);
 
-    exec.run();
+    exec.run("controller");
 
     return 0;
 }
-

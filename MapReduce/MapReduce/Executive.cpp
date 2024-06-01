@@ -1,14 +1,22 @@
 #include "Executive.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <Windows.h>
 
+// Helper function for char* to LPWSTR conversion
+std::wstring convertCharToLPWSTR(const char* charArray) {
+    std::wstring wideString = std::wstring(charArray, charArray + strlen(charArray));
+    return wideString;
+}
+
+// Constructor implementation
 Executive::Executive(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
-    const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize)
-    : fileManagement(inputDir, tempDir, outputDir),  
+    const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize, int reducers)
+    : fileManagement(inputDir, tempDir, outputDir),
     hMapDll(nullptr), hReduceDll(nullptr),
     mapInstance(nullptr), reduceInstance(nullptr),
-    bufferSize(bufSize),
+    bufferSize(bufSize), numReducers(reducers),
     workflow(inputDir, tempDir, outputDir, nullptr, nullptr) {  // Temporarily initialize with nullptr
 
     loadMapDll(mapDllPath);
@@ -22,8 +30,7 @@ Executive::Executive(const std::string& inputDir, const std::string& tempDir, co
     }
 }
 
-void Executive::run() {
-    
+void Executive::run(const std::string& mode, int mapperIndex) {
     if (mapInstance && reduceInstance) {
         workflow.run();
     }
@@ -33,6 +40,7 @@ void Executive::run() {
     markSuccess();
 }
 
+// Destructor implementation
 Executive::~Executive() {
     if (mapInstance) {
         delete mapInstance;
@@ -44,7 +52,7 @@ Executive::~Executive() {
     }
 }
 
-
+// Mark success method implementation
 void Executive::markSuccess() {
     std::string successFilePath = fileManagement.getOutputDirectory() + "/SUCCESS";
     std::ofstream successFile(successFilePath);
@@ -58,8 +66,9 @@ void Executive::markSuccess() {
     }
 }
 
+// Load map DLL implementation
 void Executive::loadMapDll(const std::string& path) {
-    hMapDll = LoadLibraryA(path.c_str());
+    hMapDll = LoadLibraryW(convertCharToLPWSTR(path.c_str()).c_str());
     if (!hMapDll) {
         std::cerr << "Failed to load Map DLL" << std::endl;
         return;
@@ -69,11 +78,12 @@ void Executive::loadMapDll(const std::string& path) {
         std::cerr << "Failed to find CreateMapInstance function" << std::endl;
         return;
     }
-    mapInstance = createMap(fileManagement, bufferSize);
+    mapInstance = createMap(fileManagement, bufferSize, numReducers, 0); // Adjust the parameters as needed
 }
 
+// Load reduce DLL implementation
 void Executive::loadReduceDll(const std::string& path) {
-    hReduceDll = LoadLibraryA(path.c_str());
+    hReduceDll = LoadLibraryW(convertCharToLPWSTR(path.c_str()).c_str());
     if (!hReduceDll) {
         std::cerr << "Failed to load Reduce DLL" << std::endl;
         return;
@@ -85,4 +95,3 @@ void Executive::loadReduceDll(const std::string& path) {
     }
     reduceInstance = createReduce(fileManagement);
 }
-

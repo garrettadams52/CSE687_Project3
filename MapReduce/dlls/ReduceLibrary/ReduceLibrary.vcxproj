@@ -132,7 +132,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\garrettadams\source\Repos\CSE687_Project1\MapReduce\shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"C:\Repo\CSE687_Project3\MapReduce\shared\include"</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;REDUCELIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
