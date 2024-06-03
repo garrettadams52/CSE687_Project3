@@ -78,7 +78,7 @@ void Executive::loadMapDll(const std::string& path) {
         std::cerr << "Failed to find CreateMapInstance function" << std::endl;
         return;
     }
-    mapInstance = createMap(fileManagement, bufferSize, numReducers, 0); // Adjust the parameters as needed
+    mapInstance = createMap(&fileManagement, bufferSize);
 }
 
 // Load reduce DLL implementation
@@ -93,5 +93,5 @@ void Executive::loadReduceDll(const std::string& path) {
         std::cerr << "Failed to find CreateReduceInstance function" << std::endl;
         return;
     }
-    reduceInstance = createReduce(fileManagement);
+    reduceInstance = createReduce(&fileManagement);
 }

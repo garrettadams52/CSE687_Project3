@@ -9,6 +9,10 @@ namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
     if (argc > 1 && std::string(argv[1]) == "mapper") {
+        if (argc != 6) {
+            std::cerr << "Error: Incorrect number of arguments for mapper mode.\n";
+            return 1;
+        }
         int mapperIndex = std::stoi(argv[2]);
         std::string mapDllPath = argv[3];
         std::string inputDirectory = argv[4];
@@ -35,9 +39,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (!fs::exists(inputDirectory) || !fs::is_directory(inputDirectory) ||
-        !fs::exists(mapDllPath) || !fs::exists(reduceDllPath)) {
-        std::cerr << "Error: One or more specified paths do not exist or are not accessible." << std::endl;
+    if (!fs::exists(inputDirectory) || !fs::is_directory(inputDirectory)) {
+        std::cerr << "Error: Input directory does not exist or is not accessible." << std::endl;
+        return 1;
+    }
+    if (!fs::exists(mapDllPath)) {
+        std::cerr << "Error: Map DLL path does not exist or is not accessible." << std::endl;
+        return 1;
+    }
+    if (!fs::exists(reduceDllPath)) {
+        std::cerr << "Error: Reduce DLL path does not exist or is not accessible." << std::endl;
         return 1;
     }
 
