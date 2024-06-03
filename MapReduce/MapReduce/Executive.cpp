@@ -14,16 +14,16 @@ std::wstring convertCharToLPWSTR(const char* charArray) {
 Executive::Executive(const std::string& inputDir, const std::string& tempDir, const std::string& outputDir,
     const std::string& mapDllPath, const std::string& reduceDllPath, int bufSize, int reducers)
     : fileManagement(inputDir, tempDir, outputDir),
-    hMapDll(nullptr), hReduceDll(nullptr),
+    hMapDll(nullptr), hReduceDll(nullptr), 
     mapInstance(nullptr), reduceInstance(nullptr),
     bufferSize(bufSize), numReducers(reducers),
-    workflow(inputDir, tempDir, outputDir, nullptr, nullptr) {  // Temporarily initialize with nullptr
+    workflow(inputDir, tempDir, outputDir, reduceDllPath, nullptr, nullptr) {  // Temporarily initialize with nullptr
 
     loadMapDll(mapDllPath);
     loadReduceDll(reduceDllPath);
 
     if (mapInstance && reduceInstance) {
-        workflow = Workflow(inputDir, tempDir, outputDir, mapInstance, reduceInstance);
+        workflow = Workflow(inputDir, tempDir, outputDir, reduceDllPath, mapInstance, reduceInstance);
     }
     else {
         std::cerr << "Failed to load map or reduce DLLs correctly.\n";
@@ -93,5 +93,9 @@ void Executive::loadReduceDll(const std::string& path) {
         std::cerr << "Failed to find CreateReduceInstance function" << std::endl;
         return;
     }
-    reduceInstance = createReduce(fileManagement);
+
+    std::string inFile = "";
+    std::string outFile = "\\final_output.txt";
+
+    reduceInstance = createReduce(fileManagement, inFile, outFile);
 }

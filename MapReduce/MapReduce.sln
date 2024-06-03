@@ -7,14 +7,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapReduce", "MapReduce\MapR
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapLibrary", "dlls\MapLibrary\MapLibrary.vcxproj", "{E56C9524-73CE-4AAC-A6CD-2CA500593314}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReduceLibrary", "dlls\ReduceLibrary\ReduceLibrary.vcxproj", "{71199EF7-0F03-4D07-8BAE-D296F8950A1A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F340DEF-A10C-4583-8E8F-57B2F0BCDB62}"
 	ProjectSection(SolutionItems) = preProject
 		shared\include\IFileManagement.h = shared\include\IFileManagement.h
 		shared\include\IMap.h = shared\include\IMap.h
 		shared\include\IReduce.h = shared\include\IReduce.h
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReduceLibrary", "dlls\ReduceLibrary\ReduceLibrary.vcxproj", "{71199EF7-0F03-4D07-8BAE-D296F8950A1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

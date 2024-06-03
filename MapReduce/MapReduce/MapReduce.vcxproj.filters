@@ -24,10 +24,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sort.cpp">
+    <ClCompile Include="WorkFlow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WorkFlow.cpp">
+    <ClCompile Include="Sort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +35,13 @@
     <ClInclude Include="Executive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WorkFlow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileManagement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

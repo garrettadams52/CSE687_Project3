@@ -6,7 +6,7 @@
 #include <Windows.h>
 
 typedef IMap* (*CREATEMAPFUNC)(FileManagement&, size_t, int, int);
-typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement&);
+typedef IReduce* (*CREATEREDUCEFUNC)(FileManagement&, std::string, std::string);
 
 class Executive {
     Workflow workflow;
@@ -15,6 +15,7 @@ class Executive {
     HMODULE hReduceDll;
     IMap* mapInstance;
     IReduce* reduceInstance;
+    std::string reduceDllPath;
     int bufferSize;
     int numReducers;
 
@@ -24,6 +25,7 @@ public:
     ~Executive();
     void run(const std::string& mode, int mapperIndex = -1);
     void markSuccess();
+
 
 private:
     void loadMapDll(const std::string& path);
