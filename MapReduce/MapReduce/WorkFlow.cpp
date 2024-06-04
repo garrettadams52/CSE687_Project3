@@ -5,6 +5,7 @@
 #include "IMap.h"
 #include "IReduce.h"
 #include "Executive.h"
+#include <exception>
 #include <thread>
 #include <vector>
 #include <sstream>
@@ -87,6 +88,9 @@ void Workflow::run() {
                     std::istringstream stream(line);
                     std::string word;
                     while (stream >> word) {
+                        word.erase(std::remove_if(word.begin(), word.end(),
+                            [](unsigned char c) { return !std::isalpha(c); }), word.end());
+                        std::transform(word.begin(), word.end(), word.begin(), ::tolower);
                         int reducerIndex = Workflow::partitionFunction(word, numReducers);
                         std::string outputFileName = tempDirVec[reducerIndex] + "\\mapper_" + std::to_string(i) + "_reducer_" + std::to_string(reducerIndex) + ".txt";
                         std::ofstream outputFile(outputFileName, std::ios::app);
@@ -116,7 +120,7 @@ void Workflow::run() {
     Sort sorter(&fileManagement, tempDir1, tempDir2);
     sorter.sortAndAggregate();  // Perform sorting and aggregation
 
-    std::cout << "Mapping phase completed. Starting reduce phase..." << std::endl;
+    std::cout << "Sorting phase completed. Starting reduce phase..." << std::endl;
 
     std::string inFile1 = "\\sorted_aggregated_output1.txt";
     std::string inFile2 = "\\sorted_aggregated_output2.txt";
@@ -142,8 +146,14 @@ void Workflow::run() {
     std::vector<std::thread> reducerThreads;
 
     //Call reducers and thread them
-    reducerThreads.emplace_back([&reduce1]() {reduce1->ReduceFunction();});
-    reducerThreads.emplace_back([&reduce2]() {reduce2->ReduceFunction();});
+    reducerThreads.emplace_back([&reduce1]() {
+        reduce1->ReduceFunction();
+        std::cout << "Reducer process 1 completed\n";
+        });
+    reducerThreads.emplace_back([&reduce2]() {
+        reduce2->ReduceFunction();
+        std::cout << "Reducer process 2 completed\n";
+        });
 
     // Wait for all reducer threads to complete
     for (auto& thread : reducerThreads) {
@@ -151,6 +161,8 @@ void Workflow::run() {
             thread.join();
         }
     }
+
+    std::cout << "Merging final results...\n";
 
     //Define file path parameters to pass to finalSort
     std::string reduceFile1 = fileManagement.getOutputDirectory() + "\\reduced_output1.txt";

@@ -22,11 +22,11 @@ WordCountMapper::WordCountMapper(IFileManagement* fileManager, size_t bufferSize
         fs::create_directories(tempDirectory);
     }
 
-    std::string fullPath = tempDirectory + "\\temp_output.txt";
+    /*std::string fullPath = tempDirectory + "\\temp_output.txt";
     outputFile.open(fullPath, std::ios::app);
     if (!outputFile) {
         throw std::runtime_error("Failed to open output file at: " + fullPath);
-    }
+    }*/
 }
 
 WordCountMapper::~WordCountMapper() {
