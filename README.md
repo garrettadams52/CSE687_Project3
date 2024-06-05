@@ -59,3 +59,49 @@ Ensure that all three projects (`MapLibrary`, `ReduceLibrary`, and `MapReduce`) 
      - `Multi-threaded Debug DLL (/MDd)`
 
 Make sure to repeat these steps for each project (`MapLibrary`, `ReduceLibrary`, and `MapReduce`) to ensure that they all use the same runtime library settings.
+
+# CSE687_Project 4
+
+1. Repeat all previous steps for Stub and Controller Projects.
+2. Ensure Project is located in C:\Repo\
+
+
+## Build Order
+
+Ensure that the projects are built in the following order:
+1. 'Stub'
+2. `MapLibrary`
+3. `ReduceLibrary`
+4. `MapReduce`
+5. 'Controller'
+
+## Steps to Configure
+1. Right click on References under Stub project and add reference to MapReduce Project.
+2. Unput Configuration Properties -> Linker -> Input -> Addition Dependencies
+   a. MapLibrary.lib
+   b. ReduceLibrary.lib
+3. Right click on any project -> Build Dependencies -> Project Dependencies
+    a. Controller No Dependencies
+    b. MapLibrary None
+    C. MapReduce depends on MapLibrary and ReduceLibrary
+    d. ReduceLibrary None
+    e. Stub depends on MapReduce
+4. Right click on any project -> Configure Startup Projects
+    a. Select Multiple Startup Projects
+    b. Select Start for Stub and Controller
+    c. Ensure Order is:
+        1. Stub
+        2. MapLibrary
+        3. MapReduce
+        4. ReduceLibrary
+        5. Controller
+5. Clean Solution
+6. Build Solution
+
+## How to run in command line
+### MAP [filepath]
+Map C:\MapReduceProj\Shakespear C:\MapReduceProj\ C:\MapReduceProj\ C:\Repo\CSE687_Project3\MapReduce\x64\Debug\MapLibrary.dll C:\Repo\CSE687_Project3\MapReduce\x64\Debug\ReduceLibrary.dll
+
+### Reduce [filepath]
+Reduce C:\MapReduceProj\Shakespear C:\MapReduceProj\ C:\MapReduceProj\ C:\Repo\CSE687_Project3\MapReduce\x64\Debug\MapLibrary.dll C:\Repo\CSE687_Project3\MapReduce\x64\Debug\ReduceLibrary.dll
+
