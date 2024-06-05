@@ -47,6 +47,10 @@ std::string FileManagement::getOutputDirectory() const {
     return outputDirectory;
 }
 
+void FileManagement::setInputDirectory(std::string inputDirectory) {
+    this->inputDirectory = inputDirectory;
+}
+
 
 void FileManagement::clearFiles(const std::string& dirPath, const std::vector<std::string>& fileNames) {
     try {

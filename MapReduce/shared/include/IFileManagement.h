@@ -16,6 +16,7 @@ public:
 
     virtual std::string getTempDirectory() const = 0;
     virtual std::string getOutputDirectory() const = 0;
+    virtual void setInputDirectory(std::string inputDirectory) = 0;
 };
 
 #endif // IFILEMANAGEMENT_H

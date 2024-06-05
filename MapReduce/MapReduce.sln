@@ -4,17 +4,33 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapReduce", "MapReduce\MapReduce.vcxproj", "{86648FEB-9574-443A-A21A-DBF2A5F85895}"
+	ProjectSection(ProjectDependencies) = postProject
+		{71199EF7-0F03-4D07-8BAE-D296F8950A1A} = {71199EF7-0F03-4D07-8BAE-D296F8950A1A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapLibrary", "dlls\MapLibrary\MapLibrary.vcxproj", "{E56C9524-73CE-4AAC-A6CD-2CA500593314}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReduceLibrary", "dlls\ReduceLibrary\ReduceLibrary.vcxproj", "{71199EF7-0F03-4D07-8BAE-D296F8950A1A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F340DEF-A10C-4583-8E8F-57B2F0BCDB62}"
 	ProjectSection(SolutionItems) = preProject
+		shared\include\Executive.h = shared\include\Executive.h
+		shared\include\FileManagement.h = shared\include\FileManagement.h
 		shared\include\IFileManagement.h = shared\include\IFileManagement.h
 		shared\include\IMap.h = shared\include\IMap.h
 		shared\include\IReduce.h = shared\include\IReduce.h
+		shared\include\Map.h = shared\include\Map.h
+		shared\include\Reduce.h = shared\include\Reduce.h
+		shared\include\Sort.h = shared\include\Sort.h
+		shared\include\WorkFlow.h = shared\include\WorkFlow.h
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReduceLibrary", "dlls\ReduceLibrary\ReduceLibrary.vcxproj", "{71199EF7-0F03-4D07-8BAE-D296F8950A1A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stub", "Stub\Stub.vcxproj", "{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86648FEB-9574-443A-A21A-DBF2A5F85895} = {86648FEB-9574-443A-A21A-DBF2A5F85895}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Controller", "Controller\Controller.vcxproj", "{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +78,30 @@ Global
 		{71199EF7-0F03-4D07-8BAE-D296F8950A1A}.Release|x64.Build.0 = Release|x64
 		{71199EF7-0F03-4D07-8BAE-D296F8950A1A}.Release|x86.ActiveCfg = Release|Win32
 		{71199EF7-0F03-4D07-8BAE-D296F8950A1A}.Release|x86.Build.0 = Release|Win32
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|ARM64.ActiveCfg = Debug|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|ARM64.Build.0 = Debug|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|x64.ActiveCfg = Debug|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|x64.Build.0 = Debug|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|x86.ActiveCfg = Debug|Win32
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Debug|x86.Build.0 = Debug|Win32
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|ARM64.ActiveCfg = Release|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|ARM64.Build.0 = Release|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|x64.ActiveCfg = Release|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|x64.Build.0 = Release|x64
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|x86.ActiveCfg = Release|Win32
+		{456E1571-B78C-4B72-8C3B-FEE774B7D2F6}.Release|x86.Build.0 = Release|Win32
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|ARM64.ActiveCfg = Debug|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|ARM64.Build.0 = Debug|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|x64.ActiveCfg = Debug|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|x64.Build.0 = Debug|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Debug|x86.Build.0 = Debug|Win32
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|ARM64.ActiveCfg = Release|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|ARM64.Build.0 = Release|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|x64.ActiveCfg = Release|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|x64.Build.0 = Release|x64
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|x86.ActiveCfg = Release|Win32
+		{8DC3D2F6-0A58-4E99-BC2A-4DE74D3B1885}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

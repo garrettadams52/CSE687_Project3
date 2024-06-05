@@ -15,34 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\MapReduce\Stub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WorkFlow.cpp">
+    <ClCompile Include="..\MapReduce\Executive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sort.cpp">
+    <ClCompile Include="..\MapReduce\WorkFlow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileManagement.cpp">
+    <ClCompile Include="..\MapReduce\Sort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Executive.cpp">
+    <ClCompile Include="..\MapReduce\FileManagement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Executive.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WorkFlow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileManagement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Stub.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
