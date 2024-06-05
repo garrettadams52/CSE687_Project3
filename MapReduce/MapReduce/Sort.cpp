@@ -2,13 +2,17 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <map>
+#include <vector>
+#include <string>
+#include <iostream>
 
+// Constructor
 Sort::Sort(FileManagement* fileManager, std::string inputDir1, std::string inputDir2)
     : fileManager(fileManager), inputDir1(inputDir1), inputDir2(inputDir2) {}
 
 void Sort::sortAndAggregate() {
-
-    std::vector<std::string>dirVec{ inputDir1, inputDir2 };
+    std::vector<std::string> dirVec{ inputDir1, inputDir2 };
 
     int counter = 0;
 
@@ -31,7 +35,6 @@ void Sort::sortAndAggregate() {
                 ss.ignore(2, ')');
                 entries.emplace_back(word, count);
             }
-
         }
 
         std::sort(entries.begin(), entries.end(), [](const auto& a, const auto& b) {
@@ -51,7 +54,6 @@ void Sort::sortAndAggregate() {
         }
 
         fileManager->writeFile(outputPath, outputContent.str(), false);
-
     }
 }
 

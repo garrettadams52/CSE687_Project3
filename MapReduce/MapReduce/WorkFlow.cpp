@@ -9,6 +9,8 @@
 #include <thread>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+#include <cctype>
 #include <fstream> // Include for std::ofstream
 #include <functional> // Include for std::hash
 #include <direct.h>
